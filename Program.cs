@@ -5,7 +5,14 @@ using KRR_Proj;
 
 // CommandInvoker.Loop();
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "_myAllowSpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                      });
+});
 
 // Add services to the container.
 
@@ -34,6 +41,7 @@ app.MapFallbackToFile("index.html");
 
 // app.UseAuthentication();
 // app.UseAuthorization();
+app.UseCors("_myAllowSpecificOrigins");
 
 
 

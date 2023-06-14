@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
@@ -14,9 +15,12 @@ namespace KRR_Proj
     {
         SUCCESS,
         FAILED,
+        INFO_LANG,
+        INFO_MODEL,
+
         QUERY_TRUE,
         QUERY_FALSE,
-		STATE_CHANGED
+        STATE_CHANGED
     }
     public static class CommandFactory
     {
@@ -92,7 +96,7 @@ namespace KRR_Proj
 
         public static States state = States.MAIN;
 
-        public static ILanguage Lang;
+        public static ILanguage Lang = new Language();
         public static List<IStructure> Models;
 
         public static void Loop()
@@ -117,7 +121,7 @@ namespace KRR_Proj
 
     public interface ICommand
     {
-        (CommandStatus, string) Execute();
+        (CommandStatus, string[]) Execute();
     }
 
     public class BeginCreateLangCommand : ICommand
@@ -126,13 +130,13 @@ namespace KRR_Proj
         //public BeginCreateLangCommand(string[] parts)
         //{
         //      }
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             CommandInvoker.Lang = new Language();
             CommandInvoker.Models = new List<IStructure>();
             CommandInvoker.state = States.CREATE;
 
-            return (CommandStatus.STATE_CHANGED, "State changed");
+            return (CommandStatus.STATE_CHANGED, new string[] { "State changed" });
         }
     }
 
@@ -142,7 +146,7 @@ namespace KRR_Proj
         //public BeginCreateLangCommand(string[] parts)
         //{
         //      }
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             if (CommandInvoker.Models.Count == 0)
             {
@@ -150,26 +154,26 @@ namespace KRR_Proj
             }
 
             CommandInvoker.state = States.QUERY;
-            return (CommandStatus.STATE_CHANGED, "State changed");
+            return (CommandStatus.STATE_CHANGED, new string[] { "State changed" });
         }
     }
 
     public class ContinueCreateLangCommand : ICommand
     {
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             CommandInvoker.state = States.CREATE;
-            return (CommandStatus.STATE_CHANGED, "State changed");
+            return (CommandStatus.STATE_CHANGED, new string[] { "State changed" });
         }
     }
 
     public class AbortCreateCommand : ICommand
     {
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             CommandInvoker.Lang = new Language();
             CommandInvoker.state = States.MAIN;
-            return (CommandStatus.SUCCESS, "State changed");
+            return (CommandStatus.SUCCESS, new string[] { "State changed" });
 
         }
     }
@@ -182,7 +186,7 @@ namespace KRR_Proj
             this.parts = parts;
         }
 
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             if (CommandInvoker.Models.Count == 0) throw new Exception("No Model To Query");
 
@@ -193,13 +197,13 @@ namespace KRR_Proj
             }
             if (res)
             {
-                return (CommandStatus.QUERY_TRUE, "It is a consequence of D");
+                return (CommandStatus.QUERY_TRUE, new string[] { "It is a consequence of D" });
                 // Console.WriteLine("It is a consequence of D");
             }
             else
             {
                 Console.WriteLine("It is NOT a consequence of D");
-                return (CommandStatus.QUERY_FALSE, "It is NOT a consequence of D");
+                return (CommandStatus.QUERY_FALSE, new string[] { "It is NOT a consequence of D" });
             }
 
         }
@@ -212,10 +216,10 @@ namespace KRR_Proj
         {
             this.parts = parts;
         }
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             CommandInvoker.Lang.AddStatement(IDescriptionStatement.Parse(parts));
-            return (CommandStatus.SUCCESS, "State changed");
+            return (CommandStatus.SUCCESS, new string[] { "State changed" });
         }
     }
 
@@ -224,11 +228,11 @@ namespace KRR_Proj
         //public EndCreateLangCommand(string[] parts)
         //{
         //}
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             //CommandInvoker.Lang.MakeModels();
             CommandInvoker.state = States.MAIN;
-            return (CommandStatus.STATE_CHANGED, "State changed");
+            return (CommandStatus.STATE_CHANGED, new string[] { "State changed" });
         }
     }
 
@@ -237,31 +241,38 @@ namespace KRR_Proj
         //public EndCreateLangCommand(string[] parts)
         //{
         //}
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             //CommandInvoker.Lang.MakeModels();
             CommandInvoker.state = States.MAIN;
-            return (CommandStatus.SUCCESS, "State changed");
+            return (CommandStatus.SUCCESS, new string[] { "State changed" });
 
         }
     }
 
     public class ShowStatementsCommand : ICommand
     {
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
+            List<string> sb = new List<string>();
+            int Count = 0;
             foreach (var s in CommandInvoker.Lang.Statements)
             {
-                Console.WriteLine(s.Content);
+
+                // sb.Append($"{Count}: ");
+                sb.Add(s.Content);
+                // sb.Append(";&#10;");
+                Count++;
+
             }
-            return (CommandStatus.SUCCESS, "State changed");
+            return (CommandStatus.INFO_LANG, sb.ToArray());
 
         }
     }
 
     public class ShowModelCommand : ICommand
     {
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             if (CommandInvoker.Models.Count == 0)
             {
@@ -271,17 +282,17 @@ namespace KRR_Proj
             {
                 Console.Write(s);
             }
-            return (CommandStatus.SUCCESS, "State changed");
+            return (CommandStatus.SUCCESS, new string[] { "State changed" });
 
         }
     }
 
     public class BuildModelCommand : ICommand
     {
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             CommandInvoker.Models = CommandInvoker.Lang.MakeModels().ToList();
-            return (CommandStatus.SUCCESS, "State changed");
+            return (CommandStatus.SUCCESS, new string[] { "State changed" });
 
         }
     }
@@ -289,10 +300,10 @@ namespace KRR_Proj
 
     public class ExitCommand : ICommand
     {
-        public (CommandStatus, string) Execute()
+        public (CommandStatus, string[]) Execute()
         {
             CommandInvoker.state = States.EXIT;
-            return (CommandStatus.STATE_CHANGED, "State changed");
+            return (CommandStatus.STATE_CHANGED, new string[] { "State changed" });
 
         }
     }

@@ -1,0 +1,91 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #E01A76;
+}
+
+.main-panel{
+  display: flex;
+}
+
+.command-input {
+  width: 500px;
+  height: 450px;
+  /* text-align: left; */
+  line-height: normal;
+  /* vertical-align: top; */
+  vertical-align: bottom;
+  text-indent: 0;
+}
+
+.box-lang {
+  width: 245px;
+  /* text-align: left; */
+}
+.box-model {
+  width: 500px;
+  /* text-align: left; */
+}
+.box-display{
+  /* width: 245px; */
+  height: 450px;
+  border: 1px solid;
+}
+/* .btn-finish,
+.btn-primary, */
+.btn-33 {
+  width: 160px;
+  /* width: 50%; */
+  height: 50px;
+  margin-right:  10px;
+  margin-top:  10px;
+  margin-bottom:  10px;
+
+}
+.btn-50 {
+  width: 245px;
+  /* width: 50%; */
+  height: 50px;
+  margin-right:  10px;
+  margin-top:  10px;
+  margin-bottom:  10px;
+
+}
+.btn-transparent{
+  width: 40px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  cursor: pointer;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+.btn-primary2 {
+  color: #fff;
+  background-color: #1F6E8C;
+  border-color: #1861ac;
+}
+.btn-primary3 {
+  color: #fff;
+  background-color: #B5C7C9;
+  border-color: #688847;
+}
+.btn-primary4 {
+  color: #fff;
+  background-color: #89D7BC;
+  border-color: #688847;
+}
+
+.btn-finish {
+  color: #fff;
+  background-color: #F9A647;
+  border-color: #353534;
+}

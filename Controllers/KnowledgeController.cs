@@ -21,10 +21,14 @@ public class KnowledgeController : ControllerBase
     }
 
     [Route("state")]
-    [HttpPost]
+    [HttpGet]
     public ActionResult GetStatus()
     {
-        return Content($"State: {CommandInvoker.state}", "text/html");
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
+        // Response.Headers.Add('Access-Control-Allow-Credentials', 'true');
+
+        return Ok(new StateResponse(CommandInvoker.state.ToString()));
+        // return Content($"State: {CommandInvoker.state}", "text/html");
     }
 
 
@@ -32,23 +36,45 @@ public class KnowledgeController : ControllerBase
     [HttpPost]
     public ActionResult ExecuteCommand([FromBody] CommandRequest commandRequest)
     {
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
         try
         {
-            ICommand? command = CommandFactory.Make(commandRequest.Text, CommandInvoker.state);
-            if (command != null) {
-                (CommandStatus status, string output) = command.Execute();
-                return Ok(new CommandResponse(status, output));
-            }else{
-                return Ok(new CommandResponse(CommandStatus.FAILED, "No command."));
+
+            string? text = commandRequest.Text;
+            string[] output = new string[]{"No command."};
+            if (text == null)
+            {
+                return Ok(new CommandResponse(CommandStatus.FAILED, output));
             }
+
+            List<string> commandTextList = text.Split('\n').ToList();
+            // bool flag = false;
+            CommandStatus status = CommandStatus.FAILED;
+            
+            ICommand? command;
+            foreach (string singleText in commandTextList)
+            {
+                Console.WriteLine(singleText);
+                Console.WriteLine(";;;");
+                command = CommandFactory.Make(singleText, CommandInvoker.state);
+
+                if (command != null)
+                {
+                    // flag = true;
+                    (status, output) = command.Execute();
+
+                }
+            }
+            return Ok(new CommandResponse(status, output));
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return Ok(new CommandResponse(CommandStatus.FAILED, e.ToString()));
+            // Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+            return Ok(new CommandResponse(CommandStatus.FAILED, new string[]{e.ToString()}));
         }
-        // return Ok(commandRequest);
-        // return Content($"Show: {commandText.Text}", "text/html");
+        
     }
 
 
@@ -60,14 +86,24 @@ public class CommandRequest
     public string? Text { get; set; }
 }
 
+public class StateResponse
+{
+    public StateResponse(string state)
+    {
+        State = state;
+    }
+    public string State { get; set; }
+}
+
 public class CommandResponse
 {
-    public CommandResponse(CommandStatus status, string text) {
-        this.Status = status;
+    public CommandResponse(CommandStatus status, string[] text)
+    {
+        this.Status = status.ToString();
         this.Text = text;
     }
-    public CommandStatus Status {get; set;}
-    public string Text { get; set; }
+    public string Status { get; set; }
+    public string[] Text { get; set; }
 }
 
 
