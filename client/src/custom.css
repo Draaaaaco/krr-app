@@ -7,54 +7,76 @@ code {
   color: #E01A76;
 }
 
-.main-panel{
+.main-panel {
   display: flex;
+}
+
+h2 {
+  height: 43px;
 }
 
 .command-input {
   width: 500px;
-  height: 450px;
+  height: 220px;
   /* text-align: left; */
+  margin-bottom: 10px;
   line-height: normal;
   /* vertical-align: top; */
   vertical-align: bottom;
   text-indent: 0;
+  border: 1px solid;
+  overflow: auto;
 }
 
 .box-lang {
   width: 245px;
   /* text-align: left; */
 }
+
 .box-model {
   width: 500px;
   /* text-align: left; */
 }
-.box-display{
+
+.box-display {
   /* width: 245px; */
-  height: 450px;
+  height: 500px;
   border: 1px solid;
+  overflow: auto;
 }
+
 /* .btn-finish,
 .btn-primary, */
 .btn-33 {
   width: 160px;
   /* width: 50%; */
   height: 50px;
-  margin-right:  10px;
-  margin-top:  10px;
-  margin-bottom:  10px;
+  margin-right: 10px;
+  /* margin-top:  10px; */
+  margin-bottom: 10px;
 
 }
+
 .btn-50 {
   width: 245px;
   /* width: 50%; */
   height: 50px;
-  margin-right:  10px;
-  margin-top:  10px;
-  margin-bottom:  10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 
 }
-.btn-transparent{
+
+.btn-100 {
+  width: 500px;
+  /* width: 50%; */
+  height: 50px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-transparent {
   width: 40px;
   height: 30px;
   background: transparent;
@@ -63,24 +85,28 @@ code {
   color: inherit;
   cursor: pointer;
 }
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
 .btn-primary2 {
   color: #fff;
   background-color: #1F6E8C;
   border-color: #1861ac;
 }
+
 .btn-primary3 {
   color: #fff;
-  background-color: #B5C7C9;
-  border-color: #688847;
+  background-color: #495057;
+  border-color: #354750;
 }
+
 .btn-primary4 {
   color: #fff;
-  background-color: #89D7BC;
+  background-color: #2A9D8F;
   border-color: #688847;
 }
 
@@ -88,4 +114,56 @@ code {
   color: #fff;
   background-color: #F9A647;
   border-color: #353534;
+}
+
+.btn-alert {
+  color: #fff;
+  background-color: #FF2E2E;
+  border-color: #c54d11;
+}
+
+.basic-single {
+  width: 245px;
+  height: 50px;
+  display: inline-block;
+}
+
+.multiHandle-node {
+  height: 60px;
+  width: 150px;
+  border: 3px solid #2d2e37;
+  padding: 5px;
+  border-radius: 15px;
+  background: #eee2de;
+}
+
+.react-flow__handle {
+  opacity: 0;
+}
+
+.minimap {
+  width: 180px;
+  height: 90px;
+}
+
+.multiHandle-node label {
+  /* display: block; */
+  color: #222;
+  font-size: 15px;
+}
+
+.statement {
+  display: inline-flex;
+  margin-left: 10px;
+}
+
+.input-inline {
+  display: inline-flex;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  height: 27px;
+  font: 1em sans-serif;
+  font-size: 100%;
+  /* font-size: 1; */
 }

@@ -63,35 +63,40 @@ namespace KRR_Proj
         public override string? ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("Actions: \n");
+            sb.Append("{\n  \"Actions\":\n  [\n");
             foreach (var action in Actions)
             {
-                sb.Append(action.Name);
-                sb.Append(',');
+                sb.Append($"    \"{action.Name.Replace("\"", "\\\"")}\",\n");
+                // sb.Append("");
             }
-            sb.Append('\n');
+            sb.Remove(sb.Length-2,2);
+            sb.Append("\n  ],\n");
 
-            sb.Append("States: \n");
+            sb.Append("  \"States\":\n  [\n");
             foreach (var state in StateList)
             {
-                sb.Append(state.ToString());
-                sb.Append(',');
+                sb.Append($"    \"{state.ToString().Replace("\"", "\\\"")}\",\n");
+                // sb.Append(',');
             }
-            sb.Append('\n');
+            sb.Remove(sb.Length-2,2);
+            sb.Append("\n  ],\n");
 
-            sb.Append("TransitionMat: \n");
+            sb.Append("  \"TransitionMat\":\n  [\n");
             for (int i = 0; i < TransitionMat.Count; ++i)
             {
+                sb.Append("    [");
                 for (int j = 0; j < TransitionMat[0].Count; ++j)
                 {
+                    sb.Append(' ');
                     sb.Append(TransitionMat[i][j]);
                     if (j != TransitionMat[0].Count - 1)
                         sb.Append(',');
                 }
-                sb.Append(";\n");
+                sb.Append(" ],\n");
             }
-            sb.Append('\n');
-
+            sb.Remove(sb.Length-2,2);
+            sb.Append("\n  ]\n}");
+            Console.WriteLine(sb.ToString());
 
             return sb.ToString();
         }

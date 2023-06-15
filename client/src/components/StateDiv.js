@@ -1,7 +1,7 @@
 import React from 'react';
 import { TiRefresh } from 'react-icons/ti';
 
-export const StateDiv = ({ currentState, refresh }) => {
+const StateDiv = ({ currentState, refresh }) => {
     // const [currentState, setCurrentState] = useState("Ma");
 
 
@@ -40,4 +40,4 @@ export const StateDiv = ({ currentState, refresh }) => {
         </div>
     );
 };
-
+export default StateDiv;

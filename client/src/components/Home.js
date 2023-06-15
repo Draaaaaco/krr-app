@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { StateDiv } from "./StateDiv";
-import { CommandDiv } from './Command';
-import { LanguageDisplay } from "./LanguageDisplay";
-import { ModelDisplay } from './ModelDisplay';
+import StateDiv from "./StateDiv";
+import CommandDiv from './Command';
+import LanguageDisplay from "./LanguageDisplay";
+import ModelDisplay from './ModelDisplay';
 
-export const Home = () => {
+const Home = () => {
   // static displayName = Home.name;
   // constructor(props) {
   //   super(props);
   //   this.state = { currentState: "", };
   // } 
   const [currentState, setCurrentState] = useState("");
-  const [responeContent, setResponeContent] = useState("");
+  // const [responeContent, setResponeContent] = useState("");
   const [language, setLanguage] = useState([]);
+  const [modelResp, setModel] = useState([]);
+
   const [ifSent, setIfSent] = useState(0);
   const fetchState = async () => {
     // Send a GET requesthttp://localhost:5271/knowledge/state
@@ -47,13 +49,18 @@ export const Home = () => {
       // Update state with the received data
       return response.json();
     }).then(data => {
-      setResponeContent(data.text);
+      // setResponeContent(data.text);
 
       if (data.status === "INFO_LANG") {
-        setLanguage(data.text)
+        setLanguage(data.text);
+      } else if (data.status === "INFO_MODEL") { 
+        setModel(data.text) ;
+      } else if (data.status === "QUERY_TRUE"){
+        window.alert("[TRUE]: " + data.text);
+      }else if (data.status === "QUERY_FALSE"){
+        window.alert("[FALSE]: "+ data.text);
       }
       console.log(data.status);
-
       console.log(data.text);
     }).catch(error => {
       console.error(error);
@@ -64,6 +71,7 @@ export const Home = () => {
   };
 
   useEffect(() => { fetchState() }, [ifSent]);
+  
   // useEffect(() => { fetchState() })
   const languageLabel = async () => {
     if (currentState === "MAIN") {
@@ -73,7 +81,6 @@ export const Home = () => {
     } else {
       await sendCommand("DONE");
       await sendCommand("continue");
-
     }
   };
 
@@ -81,7 +88,9 @@ export const Home = () => {
     if (currentState === "MAIN") {
       await sendCommand("query");
     } else if (currentState === "CREATE") {
-      await sendCommand("DONE\nbuild\nquery");
+      await sendCommand("DONE");
+      await sendCommand("query");
+
     } else {
       await fetchState();
     }
@@ -93,10 +102,33 @@ export const Home = () => {
       await sendCommand("show lang");
       // setLanguage(responeContent);
       // console.log(responeContent);
-    }else if (currentState ==="CREATE") {
-      // await sendCommand("DONE");
-      // await sendCommand("show lang");
-      // await sendCommand("continue");
+    } else if (currentState === "CREATE") {
+      await sendCommand("DONE");
+      await sendCommand("show lang");
+      await sendCommand("continue");
+    }else {
+      await sendCommand("DONE");
+      await sendCommand("show lang");
+      await sendCommand("query");
+    }
+  };
+
+  const showModel = async () => {
+    await fetchState();
+    console.log(currentState);
+    if (currentState === "MAIN") {
+      await sendCommand("show model");
+      // setLanguage(responeContent);
+      // console.log(responeContent);
+    } else if (currentState === "CREATE") {
+      await sendCommand("DONE");
+      await sendCommand("show model");
+      await sendCommand("continue");
+    }else {
+      await sendCommand("DONE");
+      await sendCommand("show model");
+      await sendCommand("query");
+
     }
   };
   return (
@@ -114,9 +146,10 @@ export const Home = () => {
           <LanguageDisplay languageContent={language} triggerShowLang={showLang} />
         </div>
         <div>
-          <ModelDisplay />
+          <ModelDisplay modelContent={modelResp} triggerShowModel={showModel} />
         </div>
       </div>
     </div>
   );
 }
+export default Home;

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import "../custom.css";
+import UserManual from './UserManual';
+// import LanguageInput from './LanguageInput';
 
 
 
-export const CommandDiv = ({ currentState, onClick, triggerShowLang }) => {
+const CommandDiv = ({ currentState, onClick, triggerShowLang }) => {
   //   static displayName = Home.name;
   const [command, setCommand] = useState("");
 
@@ -12,16 +14,17 @@ export const CommandDiv = ({ currentState, onClick, triggerShowLang }) => {
   };
 
   const sendCommand = async () => { onClick(command); };
-  const sendBuild = async () => {
+  const sendBuild = async (state) => {
+    if (state === "MAIN") { return; }
     await onClick(command);
     await onClick("DONE");
     await onClick("build");
-    await setTimeout(triggerShowLang, 2000)
+    // await setTimeout(triggerShowLang, 2000)
 
     // await triggerShowLang();
   };
-  const sendAbort = async () => {
-    await onClick("ABORT");
+  const sendAbort = async (state) => {
+    if (state === "CREATE") { await onClick("ABORT"); }
     await onClick("new");
   }
 
@@ -29,26 +32,31 @@ export const CommandDiv = ({ currentState, onClick, triggerShowLang }) => {
     <div>
       {(currentState === "CREATE") || (currentState === "MAIN") ? (
         <div>
-          <div>
+          <div >
             <textarea className='command-input' type='text' onChange={handleChange} />
+            <div className='command-input'>
+              <UserManual currentState={currentState} />
+            </div>
+            {/* <LanguageInput /> */}
           </div>
           <div>
-            <button className='btn-finish btn-33' onClick={sendAbort}>Abort</button>
-
+            <button className='btn-alert btn-33' onClick={() => sendAbort(currentState)}>Abort</button>
             <button className='btn-primary btn-33' onClick={sendCommand}>Send</button>
-            <button className='btn-finish btn-33' onClick={sendBuild}>Build</button>
+            <button className='btn-finish btn-33' onClick={() => sendBuild(currentState)}>Build</button>
           </div>
         </div>
       ) : (currentState === "QUERY") ? (
         <div>
           <div>
             <textarea className='command-input' type='text' onChange={handleChange} />
+            <div className='command-input'>
+
+              <UserManual currentState={currentState} />
+            </div>
           </div>
           <div>
-            <button className='btn-primary btn-50' onClick={sendCommand}>Send</button>
-            <button className='btn-finish btn-50' onClick={sendBuild}>Build</button>
+            <button className='btn-primary btn-100' onClick={sendCommand}>Send</button>
           </div>
-          {/* <button className='btn-finish' onClick={sendBuild}>Done</button> */}
         </div>
       ) : (<div></div>)}
 
@@ -57,3 +65,4 @@ export const CommandDiv = ({ currentState, onClick, triggerShowLang }) => {
     </div>
   );
 }
+export default CommandDiv

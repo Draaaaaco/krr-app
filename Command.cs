@@ -254,18 +254,18 @@ namespace KRR_Proj
     {
         public (CommandStatus, string[]) Execute()
         {
-            List<string> sb = new List<string>();
-            int Count = 0;
+            List<string> langList = new List<string>();
+
             foreach (var s in CommandInvoker.Lang.Statements)
             {
 
                 // sb.Append($"{Count}: ");
-                sb.Add(s.Content);
+                langList.Add(s.Content);
                 // sb.Append(";&#10;");
-                Count++;
+
 
             }
-            return (CommandStatus.INFO_LANG, sb.ToArray());
+            return (CommandStatus.INFO_LANG, langList.ToArray());
 
         }
     }
@@ -276,13 +276,24 @@ namespace KRR_Proj
         {
             if (CommandInvoker.Models.Count == 0)
             {
-                Console.WriteLine("No Model");
+                // Console.WriteLine("No Model");
+                return (CommandStatus.FAILED, new string[] { "No Model" });
             }
+            List<string> modelList = new List<string>();
+
             foreach (var s in CommandInvoker.Models)
             {
-                Console.Write(s);
+                string? str = s.ToString();
+                if (str == null)
+                {
+                    modelList.Add("null");
+                }
+                else
+                {
+                    modelList.Add(str);
+                }
             }
-            return (CommandStatus.SUCCESS, new string[] { "State changed" });
+            return (CommandStatus.INFO_MODEL, modelList.ToArray());
 
         }
     }

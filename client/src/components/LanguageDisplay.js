@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import "../custom.css";
 
-export const LanguageDisplay = ({ languageContent, triggerShowLang }) => {
+const LanguageDisplay = ({ languageContent, triggerShowLang }) => {
 
     return (
         <div>
@@ -30,5 +30,5 @@ export const LanguageDisplay = ({ languageContent, triggerShowLang }) => {
     );
 
 }
-
+export default LanguageDisplay;
 
