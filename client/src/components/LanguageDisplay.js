@@ -6,7 +6,7 @@ const LanguageDisplay = ({ languageContent, triggerShowLang }) => {
     return (
         <div>
             <div>
-                <button className='btn-50 btn-primary4' onClick={triggerShowLang}>Language Display</button>
+                <button className='btn-50 btn-primary4' onClick={triggerShowLang}>Action Domain</button>
             </div>
             <div className='box-display box-lang'>
                 {/* <textarea className='display' type='text'> */}

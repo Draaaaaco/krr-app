@@ -2,6 +2,7 @@ const path = require('path');
 
 const { app, BrowserWindow } = require('electron');
 const isDev = require('electron-is-dev');
+const { ConnectionBuilder } = require("electron-cgi");
 
 function createWindow() {
   // Create the browser window.
@@ -12,6 +13,10 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
+  
+  let connection = new ConnectionBuilder()
+  .connectTo("dotnet", "run", "--project", "../../")
+  .build();
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
@@ -21,9 +26,9 @@ function createWindow() {
       : `file://${path.join(__dirname, '../build/index.html')}`
   );
   // Open the DevTools.
-  if (isDev) {
-    win.webContents.openDevTools({ mode: 'detach' });
-  }
+  // if (isDev) {
+  //   win.webContents.openDevTools({ mode: 'detach' });
+  // }
 }
 
 // This method will be called when Electron has finished

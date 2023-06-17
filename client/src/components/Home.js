@@ -16,6 +16,15 @@ const Home = () => {
   const [modelResp, setModel] = useState([]);
 
   const [ifSent, setIfSent] = useState(0);
+
+  function isJSONValid(jsonString) {
+    try {
+      JSON.parse(jsonString);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
   const fetchState = async () => {
     // Send a GET requesthttp://localhost:5271/knowledge/state
     await fetch('http://localhost:5271/knowledge/state', {
@@ -53,12 +62,17 @@ const Home = () => {
 
       if (data.status === "INFO_LANG") {
         setLanguage(data.text);
-      } else if (data.status === "INFO_MODEL") { 
-        setModel(data.text) ;
-      } else if (data.status === "QUERY_TRUE"){
+      } else if (data.status === "INFO_MODEL") {
+        if (Array.isArray(data.text)){
+        var text = data.text.filter((value)=>(isJSONValid(value)));
+            setModel(data.text);
+        }
+      } else if (data.status === "QUERY_TRUE") {
         window.alert("[TRUE]: " + data.text);
-      }else if (data.status === "QUERY_FALSE"){
-        window.alert("[FALSE]: "+ data.text);
+      } else if (data.status === "QUERY_FALSE") {
+        window.alert("[FALSE]: " + data.text);
+      } else if (data.status === "FAILED") {
+        window.alert(data.text);
       }
       console.log(data.status);
       console.log(data.text);
@@ -71,7 +85,7 @@ const Home = () => {
   };
 
   useEffect(() => { fetchState() }, [ifSent]);
-  
+
   // useEffect(() => { fetchState() })
   const languageLabel = async () => {
     if (currentState === "MAIN") {
@@ -106,7 +120,7 @@ const Home = () => {
       await sendCommand("DONE");
       await sendCommand("show lang");
       await sendCommand("continue");
-    }else {
+    } else {
       await sendCommand("DONE");
       await sendCommand("show lang");
       await sendCommand("query");
@@ -124,7 +138,7 @@ const Home = () => {
       await sendCommand("DONE");
       await sendCommand("show model");
       await sendCommand("continue");
-    }else {
+    } else {
       await sendCommand("DONE");
       await sendCommand("show model");
       await sendCommand("query");

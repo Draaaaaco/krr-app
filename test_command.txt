@@ -37,3 +37,23 @@ alive holds after LOAD,SHOOT
 4 suffices LOAD, SHOOT
 4 suffices LOAD,LOAD,LOAD,SHOOT,SHOOT,SHOOT,SHOOT
 DONE
+
+
+new
+LOAD lasts 3
+LOAD causes loaded
+SHOOT causes ~loaded
+SHOOT causes ~alive if loaded
+DONE
+BuildActionTimeStatement
+show lang
+show model
+query
+alive holds after SHOOT
+~alive holds after SHOOT
+alive holds after LOAD,SHOOT
+0 suffices LOAD
+3 suffices LOAD, SHOOT
+4 suffices LOAD, SHOOT
+4 suffices LOAD,LOAD,LOAD,SHOOT,SHOOT,SHOOT,SHOOT
+DONE

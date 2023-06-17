@@ -8,7 +8,7 @@ const statementManual = [
     "1. Initial Value Statement\n\n",
     "\t**initially** {FLUENT} \n\n",
     "2. Effect Statement\n\n",
-    "\t{ACTION} **causes** {FLUENT1 ...} [**if** {CONTDITIO1 ...}]\n\n",
+    "\t{ACTION} **causes** {FLUENT} [**if** {CONTDITIO1 ...}]\n\n",
     "3. Value Statement\n\n",
     "\t{FLUENT} **after** {ACTION1,...}",
     "4. Action Time Statement\n\n",
