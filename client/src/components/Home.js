@@ -73,6 +73,9 @@ const Home = () => {
         window.alert("[FALSE]: " + data.text);
       } else if (data.status === "FAILED") {
         window.alert(data.text);
+      }else if (data.status === "BUILD_SUCCESS") {
+        window.alert(data.text + "\nPlease press Model Display to show model.");
+        
       }
       console.log(data.status);
       console.log(data.text);

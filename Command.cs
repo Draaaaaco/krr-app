@@ -17,10 +17,11 @@ namespace KRR_Proj
         FAILED,
         INFO_LANG,
         INFO_MODEL,
-
+        
         QUERY_TRUE,
         QUERY_FALSE,
-        STATE_CHANGED
+        STATE_CHANGED,
+        BUILD_SUCCESS
     }
     public static class CommandFactory
     {
@@ -303,7 +304,7 @@ namespace KRR_Proj
         public (CommandStatus, string[]) Execute()
         {
             CommandInvoker.Models = CommandInvoker.Lang.MakeModels().ToList();
-            return (CommandStatus.SUCCESS, new string[] { "State changed" });
+            return (CommandStatus.BUILD_SUCCESS, new string[] { "Model build success." });
 
         }
     }
