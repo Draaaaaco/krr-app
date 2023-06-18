@@ -59,6 +59,8 @@ namespace KRR_Proj
         public List<IAction> Actions { get; }
         public List<IState> StateList { get; }
         public List<List<int>> TransitionMat { get; }
+        public List<IState> IsolateStateList { get; }
+
 
         public override string? ToString()
         {
@@ -77,6 +79,14 @@ namespace KRR_Proj
             {
                 sb.Append($"    \"{state.ToString().Replace("\"", "\\\"")}\",\n");
                 // sb.Append(',');
+            }
+            // sb.Remove(sb.Length-2,2);
+            // sb.Append("\n  ],\n");
+
+            // sb.Append("IsolateStates: \n");
+            foreach (var state in IsolateStateList)
+            {
+                sb.Append($"    \"{state.ToString().Replace("\"", "\\\"")}\",\n");
             }
             sb.Remove(sb.Length-2,2);
             sb.Append("\n  ],\n");
@@ -109,6 +119,35 @@ namespace KRR_Proj
 
             StateList = stateList;
             TransitionMat = transitionMat;
+
+            var iso_list = new List<IState>();
+
+            List<string> total_fluents = new List<string>(stateList[0].FluentNames);
+            List<bool> total_vals = new List<bool>();
+            for (int i = 0; i < total_fluents.Count; ++i)
+            {
+                total_vals.Add(false);
+            }
+
+            foreach (var bool_vals in Utils.IterateProductOfList(total_vals, 0, new List<bool> { false, true }))
+            {
+                var new_state = new StateVector(total_fluents, bool_vals);
+                bool exist = false;
+                foreach(var state in stateList)
+                {
+                    if (state.Equal(new_state))
+                    {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist)
+                {
+                    iso_list.Add(new_state);
+                }
+            }
+
+            IsolateStateList = iso_list;
         }
     }
 
