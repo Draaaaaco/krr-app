@@ -14,7 +14,7 @@ const CommandDiv = ({ currentState, onClick, triggerShowLang }) => {
     setCommand(evt.target.value);
   };
   const handleChangeQuery = (evt) => {
-    setCommand(evt.target.value);
+    setQuery(evt.target.value);
   };
   const sendCommand = async () => { await onClick(query);  };
   const sendBuild = async (state) => {

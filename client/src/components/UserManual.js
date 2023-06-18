@@ -12,7 +12,7 @@ const statementManual = [
     "3. Value Statement\n\n",
     "\t{FLUENT} **after** {ACTION1,...}",
     "4. Action Time Statement\n\n",
-    "\t{FLUENT} **lasts** {TIME(numeric)}",
+    "\t{ACTION} **lasts** {TIME(numeric)}",
 ];
 
 const queryManual = [
